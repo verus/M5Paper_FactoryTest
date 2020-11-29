@@ -5,6 +5,7 @@
 #include "global_setting.h"
 #include "resources/binaryttf.h"
 #include <WiFi.h>
+#include <ArduinoOTA.h>
 
 QueueHandle_t xQueue_Info = xQueueCreate(20, sizeof(uint32_t));
 
@@ -149,7 +150,12 @@ void SysInit_Start(void)
             }
         }
     }
-    
+
+    ArduinoOTA.begin();
+    ArduinoOTA.onStart([](){
+        log_d("OTA Starting...");
+    });
+
     log_d("done");
 
     while(uxQueueMessagesWaiting(xQueue_Info));
